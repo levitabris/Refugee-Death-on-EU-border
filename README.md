@@ -1,2 +1,2 @@
 # Refugee-Death-on-EU-boarder
-A Geo Visualization of the Historical Data of people dead under the boarder control.
+A geo visualization of the historical data of people dead under the boarder control in EU.
