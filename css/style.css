@@ -1,7 +1,23 @@
-* td {
-   padding:0; margin:0;
+.hidden {
+	display: none;
 }
 
-* {
-   border-collapse: collapse;
+div.tooltip {
+	color: #fff;
+	font-family: PT-sans, sans-serif;
+	font-size: 11px;
+	background-color: #0a0f36;
+	padding: 1em;
+	border-radius: 4px;
+	opacity: 0.9;
+	position: absolute;
+	max-width: 130px;
+}
+
+.country {
+ 	stroke: #0b0b11;
+ 	stroke-width: 0.3;
+  	stroke-linejoin: round;
+  	stroke-linecap: round;
+  	vector-effect: non-scaling-stroke;
 }
