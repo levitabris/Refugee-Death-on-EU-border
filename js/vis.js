@@ -9,8 +9,10 @@ var w = window,
     y = w.innerHeight|| e.clientHeight|| g.clientHeight;
 
 var svg = d3.select("body").append("svg")
-        .attr("width", x)
-        .attr("height", y)
+        .attr({
+        	"width": x,
+            "height": y
+        })
         .style('background','#271d67')
         ;
 
@@ -22,7 +24,8 @@ d3.select(window)
     
     	svg.attr({
     		"width": x,
-    		"height": y});
+    		"height": y
+    	});
 	});
 
 
@@ -46,10 +49,11 @@ d3.json('d/world.json', function(err, world) {
 
 	svg.selectAll('.country').data(worldmap.features).enter()
 		.append('path')
-		.attr('stroke-width', '5') //dosen't work
-		.attr('d', path)
-		.attr('fill', '#414081')
-		.attr('class', function(d) { return "country " + d.properties.NAME_LONG; })
+		.attr({
+			'd': path,
+			'fill':'#414081',
+			'class': function(d) { return "country " + d.properties.NAME_LONG}
+		})
 		;
 
 
@@ -61,22 +65,12 @@ d3.json('d/world.json', function(err, world) {
 			console.log();
 	  		svg	.selectAll('.originPin').data(d).enter()
 	  			.append('circle','.originPin')
-	  			.attr('r', function(d) {return Math.sqrt(d.count)})
-	  			.attr('fill', '#9093ff')
-	  			.attr('opacity', function(d){
-	  				 if (d.deathLat != "NA" && d.originLat != 'NA') {
-	  				 	return 0.2;
-	  				 }
-	  				 else {
-	  				 	return 0;
-	  				 }
-	  			})
-	  			.attr('transform',function(d) { 
-					return "translate(" + projection([
-				        d.originLng,
-				        d.originLat
-  					]) + ")";				
-	  			} )	  			
+	  			.attr({
+	  				'r': function(d) {return Math.sqrt(d.count)},
+	  				'fill': '#9093ff',
+	  				'opacity': function(d) {return (d.deathLat != "NA" && d.originLat != 'NA')? 0.2:0},
+	  				'transform': function(d) {return "translate(" + projection([d.originLng, d.originLat ]) + ")";}
+	  			})	  			
 	  			;
 
 	  		//get travel path
@@ -126,20 +120,14 @@ d3.json('d/world.json', function(err, world) {
 	        // death places
 	  		svg	.selectAll('.deathPin').data(d).enter()
 	  			.append('circle','.originPin')
-	  			.attr('r', function(d) {return Math.sqrt(d.count)})
-	  			.attr({'fill': '#881722',
+	  			.attr({
+	  				'r': function(d) {return Math.sqrt(d.count)},
+	  				'fill': '#881722',
 	  				'stroke': '#FFF',
 	  				'stroke-width': '0.3',
-	  				'opacity' : function(d) {
-	  					return (d.deathLat != "NA" && d.originLat != 'NA')? 0.5:0;},	
-	  				'transform': function(d) { 
-	  					return 'translate(' + projection([
-	  						d.deathLng,
-	  						d.deathLat
-	  					]) + ')'
-	  					}
+	  				'opacity': function(d) {return (d.deathLat != "NA" && d.originLat != 'NA')? 0.5:0;},	
+	  				'transform': function(d) {return 'translate(' + projection([d.deathLng,d.deathLat]) + ')'} 
 	  			});
-	  			
 
 	});
 });
