@@ -11,7 +11,7 @@ var w = window,
 var svg = d3.select("body").append("svg")
         .attr("width", x)
         .attr("height", y)
-        .style('background','#000043')
+        .style('background','#271d67')
         ;
 
 
@@ -20,7 +20,9 @@ d3.select(window)
 		x = w.innerWidth || e.clientWidth || g.clientWidth;
     	y = w.innerHeight|| e.clientHeight|| g.clientHeight;
     
-    	svg.attr("width", x).attr("height", y);
+    	svg.attr({
+    		"width": x,
+    		"height": y});
 	});
 
 
@@ -46,7 +48,7 @@ d3.json('d/world.json', function(err, world) {
 		.append('path')
 		.attr('stroke-width', '5') //dosen't work
 		.attr('d', path)
-		.attr('fill', '#1b246c')
+		.attr('fill', '#414081')
 		.attr('class', function(d) { return "country " + d.properties.NAME_LONG; })
 		;
 
@@ -112,9 +114,9 @@ d3.json('d/world.json', function(err, world) {
 	                d: path
 	            })
 	            .style({
-	                stroke: '#5c64ed',
+	                'stroke': '#5c64ed',
 	                'stroke-width': '0.5px',
-	                'opacity': 0.3
+	                'opacity': '0.3'
 	            })
 	            ;
 
@@ -125,23 +127,19 @@ d3.json('d/world.json', function(err, world) {
 	  		svg	.selectAll('.deathPin').data(d).enter()
 	  			.append('circle','.originPin')
 	  			.attr('r', function(d) {return Math.sqrt(d.count)})
-	  			.attr('fill', '#881722')
-	  			.attr('stroke', '#FFF')
-	  			.attr('stroke-width', '0.3')
-	  			.attr('opacity', function(d){
-	  				 if (d.deathLat != "NA" && d.originLat != 'NA') {
-	  				 	return 0.5;
-	  				 }
-	  				 else {
-	  				 	return 0;
-	  				 }
-	  			})
-	  			.attr('transform', function(d) { 
-	  				return 'translate(' + projection([
-	  					d.deathLng,
-	  					d.deathLat
-	  				]) + ')';
-	  			} );
+	  			.attr({'fill': '#881722',
+	  				'stroke': '#FFF',
+	  				'stroke-width': '0.3',
+	  				'opacity' : function(d) {
+	  					return (d.deathLat != "NA" && d.originLat != 'NA')? 0.5:0;},	
+	  				'transform': function(d) { 
+	  					return 'translate(' + projection([
+	  						d.deathLng,
+	  						d.deathLat
+	  					]) + ')'
+	  					}
+	  			});
+	  			
 
 	});
 });
