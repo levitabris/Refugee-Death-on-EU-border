@@ -11,28 +11,6 @@
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
-	"\/d\/_Final_listofDeath.json": {
-		"fileType": 524288,
-		"ignore": 1,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/d\/_Final_listofDeath.json",
-		"orderOutput": 0,
-		"outputAbbreviatedPath": "\/d\/_Final_listofDeath-min.json",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1
-		},
-	"\/d\/c_death.json": {
-		"fileType": 524288,
-		"ignore": 1,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/d\/c_death.json",
-		"orderOutput": 0,
-		"outputAbbreviatedPath": "\/d\/c_death-min.json",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1
-		},
 	"\/d\/world.json": {
 		"fileType": 524288,
 		"ignore": 1,
