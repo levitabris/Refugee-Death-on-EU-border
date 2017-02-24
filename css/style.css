@@ -1,7 +1,9 @@
 .hidden {
 	display: none;
 }
-
+svg {
+	shape-rendering: geometricPrecision;
+}
 div.tooltip {
 	color: #fff;
 	font-family: PT-sans, sans-serif;
@@ -20,4 +22,8 @@ div.tooltip {
   	stroke-linejoin: round;
   	stroke-linecap: round;
   	vector-effect: non-scaling-stroke;
+}
+
+body {
+	padding: 0;
 }
