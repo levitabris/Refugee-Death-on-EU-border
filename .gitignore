@@ -3,3 +3,4 @@
 .config.codekit
 .Rhistory
 terminal.glue
+.vite/
