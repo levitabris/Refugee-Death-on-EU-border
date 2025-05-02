@@ -21,7 +21,7 @@ var svg = d3.select("body").style('margin', '0')
         "width": x,
         "height": y
     })
-    .style('background', '#161d54');
+
 
 // detect resize window and change size accordingly
 d3.select(window)
@@ -68,9 +68,26 @@ d3.json('d/world.json', function(err, world) {
                 return "country " + d.properties.NAME_LONG
             },
             'd': path,
-            'fill': '#324489'
         })
-        .call(zoom);
+        .call(zoom)
+        .on('mousemove', function(d) {
+            d3.selectAll('.arc')
+                .filter(function(_d) {
+                    return _d.origin.trim().split('/').includes(d.properties.NAME_LONG)
+                })
+                .classed('hidden', false)
+            var mouse = d3.mouse(svg.node()).map(function(d) {
+                return parseInt(d);
+            })
+            tooltip.classed('hidden', false)
+                .attr('style', 'left:' + (mouse[0] + 15) +'px; top:' + (mouse[1] - 35) + 'px')
+                .html(`<h4 style="font-weight: bold; padding: 0; margin: 0;">${d.properties.NAME_LONG}</h4>`)
+         
+        })
+        .on('mouseout', function() {
+            d3.selectAll('.arc').classed('hidden', true)
+            tooltip.classed('hidden', true)
+        })
 
 
     //draw places
@@ -78,21 +95,30 @@ d3.json('d/world.json', function(err, world) {
         if (err) return console.error(err);
 
         // orgin places
-        console.log();
         svg.selectAll('.originPin').data(d).enter()
-            .append('circle', '.originPin')
+            .append('circle')
+            .attr('class', 'originPin')
             .attr({
                 'r': function(d) {
                     return Math.sqrt(d.count)
                 },
-                'fill': '#5471d6',
                 'opacity': function(d) {
                     return (d.deathLat != "NA" && d.originLat != 'NA') ? 0.5 : 0
                 },
                 'transform': function(d) {
                     return "translate(" + projection([d.originLng, d.originLat]) + ")";
                 }
-            });
+            })
+            .on('mousemove', function(_, i) {
+                d3.selectAll('.arc')
+                    .filter(function(d, _i) {
+                        return i == _i;
+                    })
+                    .classed('hidden', false)
+            })
+            .on('mouseout', function() {
+                d3.selectAll('.arc').classed('hidden', true)
+            })
 
         //get travel path
         travelPath = [];
@@ -101,51 +127,30 @@ d3.json('d/world.json', function(err, world) {
             //  item with i+1)
             travelPath.push({
                 type: "LineString",
+                origin: d[i].origin,
                 coordinates: [
                     [d[i].originLng, d[i].originLat],
                     [d[i].deathLng, d[i].deathLat]
                 ]
             });
         };
-        //console.log(travelPath[4]);
-
 
         // Standard enter / update
         var pathArcs = svg.selectAll(".arc")
-            .data(travelPath);
+            .data(travelPath).enter()
+            .append("path")
+            .attr('class', 'arc hidden')
+            .attr('d',  path)
 
-        //enter
-        pathArcs.enter()
-            .append("path").attr({
-                'class': 'arc'
-            }).style({
-                fill: 'none',
-            });
-
-        //update
-        pathArcs.attr({
-            //d is the points attribute for this path, we'll draw an arc between the points using the arc function
-            d: path
-        })
-            .style({
-                'stroke': '#697dca',
-                'stroke-width': '0.5px',
-                'opacity': '0.2'
-            });
-
-        // exit
-        pathArcs.exit().remove();
 
         // death places
         svg.selectAll('.deathPin').data(d).enter()
-            .append('circle', '.originPin')
+            .append('circle')
+            .attr('class', 'deathPin')
             .attr({
                 'r': function(d) {
                     return Math.sqrt(d.count)
                 },
-                'fill': '#972b38',
-                'stroke': '#FFF',
-                'stroke-width': '0.3',
                 'opacity': function(d) {
                     return (d.deathLat != "NA" && d.originLat != 'NA') ? 0.7 : 0;
                 },
@@ -154,17 +159,24 @@ d3.json('d/world.json', function(err, world) {
                 }
             })
         // get mouse hover svg node and add tooltip
-        .on('mousemove', function(d) {
+        .on('mousemove', function(d, i) {
             var mouse = d3.mouse(svg.node()).map(function(d) {
                 return parseInt(d);
             });
             tooltip.classed('hidden', false)
                 .attr('style', 'left:' + (mouse[0] + 15) +
                     'px; top:' + (mouse[1] - 35) + 'px')
-                .html('<span style="font-weight: bold"> ' + d.date + '</span>' + '<br>' + d.count + ' people ' + d['cause of death']);
-        })
+                .html(`<h4 style="font-weight: bold">${d.date}</h4> <h6>Origin: ${d.origin}</h6>${d.count} people ${d['cause of death']}`)
+            
+            d3.selectAll('.arc')
+               .filter(function(d, _i) {
+                return i == _i;
+               })
+               .classed('hidden', false)
+            })
             .on('mouseout', function() {
                 tooltip.classed('hidden', true);
+                d3.selectAll('.arc').classed('hidden', true)
             });
 
     });
